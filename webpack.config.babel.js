@@ -1,4 +1,5 @@
-import path from 'path';
+const   path    = require('path'),
+        webpack = require('webpack');
 
 const webpackConfig = {
     entry: {
@@ -9,7 +10,12 @@ const webpackConfig = {
         chunkFilename: '[name].chunk-[chunkhash].js',
         publicPath: '/',
         path: __dirname + '/dist'
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            __API__: JSON.stringify(process.env.API)
+        })
+    ]
 };
 
 module.exports = webpackConfig;
