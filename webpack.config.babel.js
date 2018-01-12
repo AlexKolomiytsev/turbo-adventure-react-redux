@@ -2,6 +2,10 @@ const   path    = require('path'),
         webpack = require('webpack');
 
 const webpackConfig = {
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
+        mainFiles: ['index']
+    },
     entry: {
         app: './src/app/index.tsx'
     },
