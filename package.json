@@ -6,7 +6,7 @@
   "scripts": {
     "build:prod": "cross-env NODE_ENV=prod API=prod webpack -p",
     "build:dev": "cross-env NODE_ENV=dev API=dev webpack -p",
-    "serve": "cross-env NODE_ENV=debug API=dev webpack-dev-server "
+    "serve": "cross-env NODE_ENV=debug API=dev webpack-dev-server --hot --history-api-fallback --port 4000 --host 0.0.0.0"
   },
   "repository": {
     "type": "git",
