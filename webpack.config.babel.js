@@ -1,7 +1,8 @@
-const path = require('path'),
-    webpack = require('webpack'),
-    HtmlWebpackPlugin = require('html-webpack-plugin'),
-    CleanWebpackPlugin = require('clean-webpack-plugin');
+const path                  = require('path'),
+    webpack                 = require('webpack'),
+    HtmlWebpackPlugin       = require('html-webpack-plugin'),
+    CleanWebpackPlugin      = require('clean-webpack-plugin'),
+    WebpackNotifierPlugin 	= require('webpack-notifier');
 
 const NODE_ENV = process.env.NODE_ENV.toLowerCase();
 
@@ -32,7 +33,7 @@ const webpackConfig = {
         mainFiles: ['index']
     },
     entry: {
-        app: './src/app/index.tsx'
+        app: ['./src/app/index.tsx']
     },
     output: {
         filename: '[name].bundle-[hash:4].js',
@@ -55,7 +56,10 @@ const webpackConfig = {
 };
 
 if (isDEBUG) {
-
+    webpackConfig.entry.app.unshift('react-hot-loader/patch');
+    webpackConfig.plugins.push(
+        new WebpackNotifierPlugin({alwaysNotify: true})
+    )
 } else {
     webpackConfig.plugins.push(
         new CleanWebpackPlugin([config.dist], { verbose: true }),
