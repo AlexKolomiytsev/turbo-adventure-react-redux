@@ -1,5 +1,4 @@
-declare const __BASE__: string;
-declare const __DEBUG__: string;
+declare const __isDEBUG__: string;
 declare const __API__: string;
 declare const module: { hot: { accept: Function } };
 declare var require: {

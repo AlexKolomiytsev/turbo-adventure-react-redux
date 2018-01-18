@@ -24,7 +24,8 @@ const isDEBUG = NODE_ENV === ENVIRONMENTS.DEBUG
 
 const config = {
     app: __dirname + '/src/app',
-    dist: __dirname + '/dist'
+    dist: __dirname + '/dist',
+    src: __dirname + '/src'
 };
 
 const webpackConfig = {
@@ -41,6 +42,16 @@ const webpackConfig = {
         publicPath: '/',
         path: __dirname + '/dist'
     },
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                use: isDEBUG ? ['react-hot-loader/webpack', 'babel-loader', 'ts-loader'] : ['babel-loader', 'ts-loader'],
+                include: path.join(config.src),
+                exclude: /(node_modules)/
+            }
+        ]
+    },
     plugins: [
         new HtmlWebpackPlugin({
             chunks: ['app', 'common'],
@@ -48,7 +59,8 @@ const webpackConfig = {
         }),
 
         new webpack.DefinePlugin({
-            __API__: JSON.stringify(process.env.API)
+            __API__: JSON.stringify(process.env.API),
+            __isDEBUG__: isDEBUG
         }),
 
         new webpack.optimize.CommonsChunkPlugin({ name: 'common' })
