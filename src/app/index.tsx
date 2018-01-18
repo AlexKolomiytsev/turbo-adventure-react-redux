@@ -17,4 +17,4 @@ if (__isDEBUG__ && module.hot) {
     });
 }
 
-ReactDOMRender(routes, root);
+ReactDomRender(routes, root);
