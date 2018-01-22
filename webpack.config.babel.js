@@ -46,9 +46,54 @@ const webpackConfig = {
         rules: [
             {
                 test: /\.tsx?$/,
+                enforce: 'pre',
+                loader: 'tslint-loader'
+            },
+            {
+                test: /\.tsx?$/,
                 use: isDEBUG ? ['react-hot-loader/webpack', 'babel-loader', 'ts-loader'] : ['babel-loader', 'ts-loader'],
                 include: path.join(config.src),
                 exclude: /(node_modules)/
+            },
+            {
+                test  : /\.html?$/,
+                loader: 'html-loader'
+            },
+            {
+                test: /\.(woff|woff2|otf)(\?v=\d+\.\d+\.\d+)?$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000,
+                        mimetype: 'application/font-woff'
+                    }
+                }]
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000,
+                        mimetype: 'application/octet-stream'
+                    }
+                }]
+            },
+            {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader'
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000,
+                        hash: 'sha512',
+                        digest: 'hex',
+                        name: '[hash].[ext]'
+                    }
+                }]
             }
         ]
     },
@@ -75,6 +120,7 @@ if (isDEBUG) {
 } else {
     webpackConfig.plugins.push(
         new CleanWebpackPlugin([config.dist], { verbose: true }),
+        new ExtractTextPlugin({filename: '[name]-[contenthash:5].css', allChunks: true, ignoreOrder: true}),
         new webpack.optimize.UglifyJsPlugin({ sourceMap: true })
     )
 }
