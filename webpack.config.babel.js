@@ -56,6 +56,26 @@ const webpackConfig = {
                 exclude: /(node_modules)/
             },
             {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader', 'postcss-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            importLoaders: 1,
+                            localIdentName: '[name]__[local]___[hash:base64:5]',
+                            camelCase: true
+                        }
+                    },
+                    'postcss-loader',
+                    'sass-loader'
+                ]
+            },
+            {
                 test  : /\.html?$/,
                 loader: 'html-loader'
             },
