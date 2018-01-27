@@ -2,16 +2,18 @@ const path                  = require('path'),
     webpack                 = require('webpack'),
     HtmlWebpackPlugin       = require('html-webpack-plugin'),
     CleanWebpackPlugin      = require('clean-webpack-plugin'),
-    WebpackNotifierPlugin 	= require('webpack-notifier');
+    WebpackNotifierPlugin   = require('webpack-notifier'),
+    ExtractTextPlugin 		= require('extract-text-webpack-plugin'),
+    autoprefixer			= require('autoprefixer');
 
 const NODE_ENV = process.env.NODE_ENV.toLowerCase();
 
 const ENVIRONMENTS = {
-    DEV: 'dev',
-    STAGE: 'staging',
-    PROD: 'prod',
-    TEST: 'test',
-    DEBUG: 'debug'
+    DEV     : 'development',
+    STAGE   : 'staging',
+    PROD    : 'production',
+    TEST    : 'test',
+    DEBUG   : 'debug'
 };
 
 const isDEBUG = NODE_ENV === ENVIRONMENTS.DEBUG
@@ -22,11 +24,16 @@ const isDEBUG = NODE_ENV === ENVIRONMENTS.DEBUG
         && NODE_ENV !== ENVIRONMENTS.DEBUG
     );
 
+const isPROD = NODE_ENV === ENVIRONMENTS.PROD;
+
 const config = {
-    app: __dirname + '/src/app',
-    dist: __dirname + '/dist',
-    src: __dirname + '/src'
+    app     : __dirname + '/src/app',
+    dist    : __dirname + '/dist',
+    src     : __dirname + '/src',
+    root    : __dirname
 };
+
+const postcssConfig = path.join(config.root, 'index.html');
 
 const webpackConfig = {
     resolve: {
@@ -56,27 +63,20 @@ const webpackConfig = {
                 exclude: /(node_modules)/
             },
             {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader', 'postcss-loader']
+                test: /\.(scss|sass|css)$/i,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        { loader: 'css-loader', options: { minimize: isPROD } },
+                        // { loader: 'postcss-loader', options: { sourceMap: true, config: { path: postcssConfig } } },
+                        { loader: 'postcss-loader', options: { sourceMap: true, parser: 'sugarss', exec: true, plugins: [require('autoprefixer')()] } },
+                        'resolve-url-loader',
+                        { loader: 'sass-loader', options: { sourceMap: true } }
+                    ]
+                })
             },
             {
-                test: /\.scss$/,
-                use: [
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            importLoaders: 1,
-                            localIdentName: '[name]__[local]___[hash:base64:5]',
-                            camelCase: true
-                        }
-                    },
-                    'postcss-loader',
-                    'sass-loader'
-                ]
-            },
-            {
-                test  : /\.html?$/,
+                test: /\.html?$/,
                 loader: 'html-loader'
             },
             {
@@ -128,7 +128,9 @@ const webpackConfig = {
             __isDEBUG__: isDEBUG
         }),
 
-        new webpack.optimize.CommonsChunkPlugin({ name: 'common' })
+        new webpack.optimize.CommonsChunkPlugin({name: 'common'}),
+
+        new ExtractTextPlugin({filename: '[name]-[contenthash:5].css', allChunks: true, ignoreOrder: true}),
     ]
 };
 
@@ -139,9 +141,8 @@ if (isDEBUG) {
     )
 } else {
     webpackConfig.plugins.push(
-        new CleanWebpackPlugin([config.dist], { verbose: true }),
-        new ExtractTextPlugin({filename: '[name]-[contenthash:5].css', allChunks: true, ignoreOrder: true}),
-        new webpack.optimize.UglifyJsPlugin({ sourceMap: true })
+        new CleanWebpackPlugin([config.dist], {verbose: true}),
+        new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
     )
 }
 
