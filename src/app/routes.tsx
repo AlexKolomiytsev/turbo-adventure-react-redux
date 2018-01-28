@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 
 import Test from './components/Test/Test';
 
-const routes =
+const routes: JSX.Element =
     <BrowserRouter>
         <Route exact path='/' component={ Test } />
     </BrowserRouter>;
