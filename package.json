@@ -7,7 +7,7 @@
     "build:prod": "cross-env NODE_ENV=production API=production webpack -p",
     "build:stage": "cross-env NODE_ENV=production API=staging webpack -p",
     "build:dev": "cross-env NODE_ENV=development API=development webpack -p",
-    "serve": "cross-env NODE_ENV=debug API=development webpack-dev-server --hot --history-api-fallback --port 8888 --host 0.0.0.0"
+    "serve": "cross-env NODE_ENV=debug API=development webpack-dev-server --hot --history-api-fallback --port 8888 --host 0.0.0.0",
     "tslint": "tslint 'src/**/*.ts'"
   },
   "repository": {
