@@ -6,24 +6,24 @@ dependencies:
     - if [ $CIRCLE_BRANCH = 'release_candidate' ]; then npm run build:stage; fi
     - if [ $CIRCLE_BRANCH = 'master' ]; then npm run build:prod; fi
 
-deployment:
-  dev:
-      branch: develop
-      owner: AlexKolomiytsev
-      commands:
-        - aws s3 sync /home/ubuntu/turbo-adventure-react-redux/dist s3://dev-turbo-adventure.com --delete
+# deployment:
+#  dev:
+#      branch: develop
+#      owner: AlexKolomiytsev
+#      commands:
+#        - aws s3 sync /home/ubuntu/turbo-adventure-react-redux/dist s3://dev-turbo-adventure.com --delete
 
-  staging:
-      branch: release_candidate
-      owner: AlexKolomiytsev
-      commands:
-        - aws s3 sync /home/ubuntu/turbo-adventure-react-redux/dist s3://stage.turbo-adventure.com --delete
+#  staging:
+#      branch: release_candidate
+#      owner: AlexKolomiytsev
+#      commands:
+#        - aws s3 sync /home/ubuntu/turbo-adventure-react-redux/dist s3://stage.turbo-adventure.com --delete
 
-  prod:
-      branch: master
-      owner: AlexKolomiytsev
-      commands:
-        - aws s3 sync /home/ubuntu/turbo-adventure-react-redux/dist s3://turbo-adventure.com --delete
+#  prod:
+#      branch: master
+#      owner: AlexKolomiytsev
+#      commands:
+#        - aws s3 sync /home/ubuntu/turbo-adventure-react-redux/dist s3://turbo-adventure.com --delete
 
 test:
   post:
