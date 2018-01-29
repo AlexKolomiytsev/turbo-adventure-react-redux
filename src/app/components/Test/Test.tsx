@@ -5,7 +5,7 @@ const Test: React.SFC<{}> = () => {
         <div>
             Test
             {
-                //afasgsa
+                // afasgsa
             }
         </div>
     );
