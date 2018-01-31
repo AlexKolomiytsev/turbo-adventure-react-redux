@@ -3,10 +3,7 @@ import * as React from 'react';
 const Test: React.SFC<{}> = () => {
     return (
         <div>
-            Test
-            {
-                // afasgsa
-            }
+            Test 123
         </div>
     );
 };
